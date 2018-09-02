@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-
-import Header from '../Header/Header';
+import 'semantic-ui-css/semantic.min.css';
 import Footer from '../Footer/Footer';
+import Layout from "../Header/Layout";
 
 const App = ({ children }) => (
   <>
-    <Header />
 
-    <main>
-      {children}
-    </main>
+    <Layout>{children}</Layout>
 
     <Footer />
   </>
