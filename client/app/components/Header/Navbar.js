@@ -18,7 +18,7 @@ class DesktopContainer extends Component {
     this.setState({ activeItem: name })
   }
 
-  hideFixedMenu= () => {
+  hideFixedMenu = () => {
     this.setState({ fixed: false })
   }
   showFixedMenu = () => {

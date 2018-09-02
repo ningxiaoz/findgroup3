@@ -19,7 +19,8 @@ class SignUpPage extends React.Component{
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.state = {
-      name:'',
+      firstName:'',
+      lastName:'',
       email:'',
       password:'',
       SignUpError:'',
