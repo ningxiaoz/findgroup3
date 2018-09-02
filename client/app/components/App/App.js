@@ -5,9 +5,7 @@ import Layout from "../Header/Layout";
 
 const App = ({ children }) => (
   <>
-
     <Layout>{children}</Layout>
-
     <Footer />
   </>
 );

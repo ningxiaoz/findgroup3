@@ -10,19 +10,21 @@ import {
 
 import App from './components/App/App';
 import NotFound from './components/App/NotFound';
-
-import Home from './components/Home/Home';
-
-import HelloWorld from './components/HelloWorld/HelloWorld';
+import About from "./components/Pages/About";
+import Home from './components/Pages/Home';
+import Group from "./components/Group/Group";
 
 import './styles/styles.scss';
+
+
 
 render((
   <Router>
     <App>
       <Switch>
         <Route exact path="/" component={Home}/>
-        <Route path="/about" component={HelloWorld}/>
+        <Route path="/about" component={About}/>
+        <Route path="/group" component={Group}/>
         <Route component={NotFound}/>
       </Switch>
     </App>
