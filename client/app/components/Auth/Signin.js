@@ -13,20 +13,23 @@ const Style = {
 class LoginPage extends React.Component{
   constructor(props) {
     super(props);
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.state = {
       isLoading:true,
       token:'',
-      SignInError:'',
-      email:'',
-      password:'',
+      signInError:'',
+      signInEmail:'',
+      signInPassword:'',
     };
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+
+    this.onSignIn = this.onSignIn.bind(this);
   }
 
   componentDidMount(){
-    const token = getFromStorage('the_main_app');
-    if(token){
+    const object = getFromStorage('the_main_app');
+    if(object && object.token){
+      const {token} = object;
       //verify token
       fetch('/api/account/verify?token='+token)
         .then(res => res.json())
@@ -51,11 +54,54 @@ class LoginPage extends React.Component{
 
   //onChange of email
   handleEmailChange(e){
-    this.setState({email:e.target.value})
+    this.setState({signInEmail:e.target.value})
   }
   //onchange of Password
   handlePasswordChange(e){
-    this.setState({password:e.target.value})
+    this.setState({signInPassword:e.target.value})
+  }
+
+  onSignIn(){
+    //grap state
+    const {
+      signInEmail,
+      signInPassword
+    } = this.state;
+
+    this.setState({
+      isLoading:true
+    });
+
+    //Post request to backend
+    fetch('/api/account/signin',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({
+        email: signInEmail,
+        password: signInPassword
+      }),
+
+    }).then(res => res.json())
+      .then(json => {
+        if(json.success){
+          setInStorage('the_main_app',{token:json.token})
+          this.setState({
+            signInError: json.message,
+            isLoading:false,
+            //input box empty
+            signInEmail:'',
+            signInPassword:'',
+            token:json.token
+          });
+        }else{
+          this.setState({
+            signInError: json.message,
+            isLoading: false
+          });
+        }
+      });
   }
 
   render(){
@@ -63,8 +109,8 @@ class LoginPage extends React.Component{
       isLoading,
       token,
       signInError,
-      email,
-      password
+      signInEmail,
+      signInPassword
     } = this.state;
 
   if (isLoading){
@@ -92,6 +138,7 @@ class LoginPage extends React.Component{
                   iconPosition='left'
                   placeholder='E-mail address'
                   type='email'
+                  value={signInEmail}
                   onChange={this.handleEmailChange}
                 />
                 <Form.Input
@@ -99,9 +146,10 @@ class LoginPage extends React.Component{
                   iconPosition='left'
                   placeholder='Password'
                   type='password'
+                  value={signInPassword}
                   onChange={this.handlePasswordChange}
                 />
-                <Button  primary animated fluid>
+                <Button  onClick={this.onSignIn} primary animated fluid>
                   <Button.Content visible>Login</Button.Content>
                   <Button.Content hidden>
                     <Icon name='sign-in' />
