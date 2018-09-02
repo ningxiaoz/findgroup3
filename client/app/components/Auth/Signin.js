@@ -1,8 +1,12 @@
 import React from 'react'
 import { Icon,Button, Form, Grid, Image, Message, Segment,Divider } from 'semantic-ui-react'
 
+import {
+  getFromStorage,
+  setInStorage
+} from "../../utils/storage";
 //style
-const divStyle = {
+const Style = {
   margin: '20px',
 };
 
@@ -12,11 +16,39 @@ class LoginPage extends React.Component{
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.state = {
+      isLoading:true,
+      token:'',
+      SignInError:'',
       email:'',
       password:'',
-
     };
   }
+
+  componentDidMount(){
+    const token = getFromStorage('the_main_app');
+    if(token){
+      //verify token
+      fetch('/api/account/verify?token='+token)
+        .then(res => res.json())
+        .then(json =>{
+          if(json.success){
+            this.setState({
+              token,
+              isLoading: false
+            });
+          }else{
+            this.setState({
+              isLoading:false,
+            });
+          }
+        });
+    }else{
+      this.setState({
+        isLoading: false,
+      });
+    }
+  }
+
   //onChange of email
   handleEmailChange(e){
     this.setState({email:e.target.value})
@@ -27,8 +59,26 @@ class LoginPage extends React.Component{
   }
 
   render(){
+    const {
+      isLoading,
+      token,
+      signInError,
+      email,
+      password
+    } = this.state;
+
+  if (isLoading){
+    return(<div><p>Loading.....</p></div>);
+  }
+
+  if (!token) {
     return(
-      <div style={divStyle}>
+      <div style={Style}>
+        {
+          (signInError)?(
+            <p>{signInError}</p>
+          ):(null)
+        }
         <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
           <Grid.Column style={{ maxWidth: 450 }}>
             {/*<Header as='h1' color='blue' textAlign='center' size='massive'>*/}
@@ -69,6 +119,12 @@ class LoginPage extends React.Component{
             </Message>
           </Grid.Column>
         </Grid>
+      </div>
+    );
+  }
+    return(
+      <div>
+        <p>Account</p>
       </div>
     );
   }
