@@ -5,7 +5,7 @@ This is a findgroup project using the following technologies:
 - [Express](http://expressjs.com/) and [Mongoose](http://mongoosejs.com/) for the backend
 - [Sass](http://sass-lang.com/) for styles (using the SCSS syntax)
 - [Webpack](https://webpack.github.io/) for compilation
-
+- [SemanticUI](https://semantic-ui.com/) for UI Package
 
 ## Requirements
 
