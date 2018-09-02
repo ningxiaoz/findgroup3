@@ -1,4 +1,4 @@
-# fingroup is created based on MERN
+# findgroup is created based on MERN
 
 This is a findgroup project using the following technologies:
 - [React](https://facebook.github.io/react/) and [React Router](https://reacttraining.com/react-router/) for the frontend
